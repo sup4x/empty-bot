@@ -1,4 +1,8 @@
 const VkBot = require('node-vk-bot-api');
+const { Notifier } = require('./meat/notifier.js')
+const {CHAT_ID} = require('./meat/const')
+
+const notifier = new Notifier()
 
 const {
     GROUP_TOKEN,
@@ -50,9 +54,39 @@ bot.on(async (ctx) => {
         console.log(e);
         return panic(e)
     }
+})
+
+/*
+
+*    *    *    *    *    *
+┬    ┬    ┬    ┬    ┬    ┬
+│    │    │    │    │    │
+│    │    │    │    │    └ day of week (0 - 7) (0 or 7 is Sun)
+│    │    │    │    └───── month (1 - 12)
+│    │    │    └────────── day of month (1 - 31)
+│    │    └─────────────── hour (0 - 23)
+│    └──────────────────── minute (0 - 59)
+└───────────────────────── second (0 - 59, OPTIONAL)
+
+*/
+notifier.addNotificationJob({
+    name: 'Citate',
+    interval: '10 10 10 * * *',
+    // Каждый день в 10 часов 10 минут, но время на сервере хероку может быть другое, поэтому хуй знает
+    func: () =>
+       // тут любая логика, также может быть отправка сообщений ботом
+        bot.execute('messages.send', {
+            peer_id: CHAT_ID,
+            random_id: rnd(),
+            message: 'Example',
+        })
 
 })
+
 
 bot.startPolling((err) => {
     console.log(err)
 })
+
+
+
